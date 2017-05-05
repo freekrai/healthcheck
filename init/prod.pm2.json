@@ -1,0 +1,19 @@
+{
+  "apps" : [{
+    "name"        : "healthcheck",
+    "cwd"         : "/opt/healthcheck/",
+    "out_file"    : "/opt/healthcheck-prod.log",
+    "error_file"  : "/opt/healthcheck-prod.error.log",
+    "pid_file"    : "../healthcheck-prod.pid",
+    "script"      : "index.js",
+    "merge_logs"  : true,
+    "args"        : "",
+    "watch"       : false,
+    "node_args"   : "",
+    "instances"   : "1",
+    "exec_mode"   : "fork_mode",
+    "env": {
+        "NODE_ENV": "production"
+    }
+  }]
+}

@@ -1,0 +1,88 @@
+#!/bin/bash
+# chkconfig: 2345 98 02
+#
+# description: Start app
+# processname: pm2
+#
+### BEGIN INIT INFO
+# Provides:          pm2
+# Required-Start: $local_fs $remote_fs
+# Required-Stop: $local_fs $remote_fs
+# Should-Start: $network
+# Should-Stop: $network
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+### END INIT INFO
+
+NAME=healthcheck
+DIR=/opt/healthcheck
+START_SCRIPT=$DIR/init/start.sh
+STOP_SCRIPT=$DIR/init/stop.sh
+STATUS_SCRIPT=$DIR/init/status.sh
+RELOAD_SCRIPT=$DIR/ init/reload.sh
+CUSER=travis
+export NODE_ENV=production
+
+super() {
+    if [ "$USER" != "$CUSER" ]; then
+        su - $CUSER -c "PATH=$PATH; NODE_ENV=$NODE_ENV DEBUG=healthchecks $*"
+    else
+        $*
+    fi
+}
+
+start() {
+    echo "Starting $NAME"
+    super $START_SCRIPT
+    RETVAL=$?
+}
+
+stop() {
+    super $STOP_SCRIPT
+    RETVAL=$?
+}
+
+reload(){
+   echo "Reloading $NAME"
+   super $RELOAD_SCRIPT
+   RETVAL=$?
+}
+
+restart() {
+    echo "Restarting $NAME"
+    stop
+    start
+    RETVAL=$?
+}
+
+status() {
+    echo "Status for $NAME:"
+    super $STATUS_SCRIPT
+    RETVAL=$?
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status
+        ;;
+   reload)
+       reload
+       ;;
+    restart)
+        restart
+        ;;
+    force-reload)
+        reload
+        ;;
+    *)
+        echo "Usage: {start|stop|status|restart|reload}"
+        exit 1
+        ;;
+esac
+exit $RETVAL

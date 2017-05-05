@@ -1,0 +1,12 @@
+# check mongo
+#http://127.0.0.1:3012/mongocheck
+
+# check elasticsearch
+#http://127.0.0.1:3012/escheck
+
+# check redis
+#http://127.0.0.1:3012/redischeck
+
+
+# check main site
+http://127.0.0.1:3012/
